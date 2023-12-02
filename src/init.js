@@ -1,4 +1,5 @@
 import { compileToFunction } from "./compiler/index"
+import { mountComponent } from "./linfecycle.js"
 import { initState } from "./state"
 
 export function initMixin(Vue){
@@ -18,6 +19,7 @@ export function initMixin(Vue){
         const vm = this
         const ops = vm.$options
         el = document.querySelector(el)
+        vm.$el = el
         if(!ops.render){
             let template
             //传入的options 没有render函数时
@@ -35,6 +37,6 @@ export function initMixin(Vue){
                 ops.render = render
             }
         }
-         console.log("🚀 ~ file: init.js:40 ~ initMixin ~ ops.render:", ops.render)
+         mountComponent(vm, el)
     }
 }

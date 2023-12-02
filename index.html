@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .cc{
+            color: blue;
+        }
+    </style>
 </head>
 <body>
-    <div id="app" style="font-size: 12px;height: 50px;color: red;"><div> DIV </div><span> hahah  {{name}} xixixi {{age}} cicii </span></div>
+    <div id="app" class="outer" style="font-size: 12px;height: 50px;color: red;">{{obj.t1}}<div class="cc" style="font-size: 24px;"> DIV </div><span> hahah  {{name}} xixixi {{age}} cicii </span></div>
     <script src="dist/vue.js"></script>
     <script>
         const vm = new Vue({
@@ -18,6 +23,7 @@
                     t1:'hahah',
                     t2:'xixix'
                 },
+                address:'3333',
                 arr:[
                     {
                         id:0
@@ -25,7 +31,13 @@
                 ],
             },
         })
-        console.log(vm);
+        setTimeout(() => {
+            vm.name = '1'
+            vm.age = 333
+            vm.$nextTick(()=>{
+                console.log("🚀 ~ file: index.html:38 ~ setTimeout ~ vm.$el:", vm.$el.innerText)
+            })
+        }, 1000);
     </script>
 </body>
 </html>

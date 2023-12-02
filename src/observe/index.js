@@ -1,4 +1,5 @@
 import { newArrayProto } from "./array"
+import { Dep } from "./dep.js"
 
 export function observe(data){
     if(typeof data !='object' || data == null) return
@@ -30,9 +31,11 @@ class Observer{
 
 export function defineReactive(target, key, value){
     observe(value)
+    let dep = new Dep()
     Object.defineProperty(target, key, {
         get(){
             console.log('获取值 '+key+':',value);
+            if(Dep.target)dep.depend()
             return value
         },
         set(newVal){
@@ -40,6 +43,7 @@ export function defineReactive(target, key, value){
             if(value === newVal)return
             observe(newVal)
             value = newVal
+            dep.notify()
         }
     })
 }

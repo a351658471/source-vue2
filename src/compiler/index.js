@@ -11,9 +11,9 @@ function genProps(attrs){
             })
             item.value = obj
         }
-        str+=`{${item.name}:${JSON.stringify(item.value)}},`
+        str+=`${item.name}:${JSON.stringify(item.value)},`
     })
-    return str.slice(0,-1)
+    return `{${str.slice(0,-1)}}`
 }
 function gen(node){
     if(node.type === 1){
