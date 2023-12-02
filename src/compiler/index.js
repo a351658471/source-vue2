@@ -11,7 +11,7 @@ function genProps(attrs){
             })
             item.value = obj
         }
-        str+=`${item.name}:${JSON.stringify(item.value)},`
+        str+=`{${item.name}:${JSON.stringify(item.value)}},`
     })
     return str.slice(0,-1)
 }
@@ -55,7 +55,14 @@ function codeGen(ast){
     
 
 export function compileToFunction(html){
+    //模板转为ast语法树
     const ast = parseHTML(html)
+    //ast语法树生成render字符串
+    let code = codeGen(ast)
+    code  = `with(this){return ${code}}`
 
-    codeGen(ast)
+    //根据render字符串 生成render函数
+    let render = new Function(code)
+
+    return render
 }

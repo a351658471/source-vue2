@@ -31,11 +31,10 @@ export function initMixin(Vue){
 
             if(template){
                 //取得template值后
-                const render = compileToFunction
-                (template)
+                const render = compileToFunction(template)
                 ops.render = render
             }
         }
-        return ops.render
+         console.log("🚀 ~ file: init.js:40 ~ initMixin ~ ops.render:", ops.render)
     }
 }

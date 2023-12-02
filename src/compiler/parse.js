@@ -5,7 +5,7 @@ const startTagOpen = new RegExp(`^<${qnameCapture}`); // 匹配标签开始 形�
 const startTagClose = /^\s*(\/?)>/; // 匹配标签结束  >
 const endTag = new RegExp(`^<\\/${qnameCapture}[^>]*>`); // 匹配标签结尾 如 </abc-123> 捕获里面的标签名
 const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/; // 匹配属性  形如 id="app"
-const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g
+
 
 
 export function parseHTML(html){
