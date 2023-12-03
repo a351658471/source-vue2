@@ -1,14 +1,16 @@
 import { compileToFunction } from "./compiler/index"
-import { mountComponent } from "./linfecycle.js"
+import { callHook, mountComponent } from "./linfecycle.js"
 import { initState } from "./state"
+import { mergeOptions } from "./utils.js"
 
 export function initMixin(Vue){
     Vue.prototype._init = function(options){
         const vm = this
-        vm.$options = options
+        vm.$options = mergeOptions(this.constructor.options, options)
+        callHook(vm, 'beforeCreate')
         //初始化数据
         initState(vm)
-
+        callHook(vm, 'created')
         if(options.el){
             vm.$mount(options.el)
         }
@@ -40,3 +42,4 @@ export function initMixin(Vue){
          mountComponent(vm, el)
     }
 }
+

@@ -53,7 +53,7 @@ function queueWatcher(watcher){
         }
     }
 }
-
+ 
 let callbacks = []
 let waiting = false
 let timerFunc

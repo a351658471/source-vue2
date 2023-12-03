@@ -14,8 +14,28 @@
     <div id="app" class="outer" style="font-size: 12px;height: 50px;color: red;">{{obj.t1}}<div class="cc" style="font-size: 24px;"> DIV </div><span> hahah  {{name}} xixixi {{age}} cicii </span></div>
     <script src="dist/vue.js"></script>
     <script>
+        Vue.mixin({
+            
+            created:function(){
+                console.log('mixin1111 -- create');
+            },
+            a:1,
+            b:2
+        })
+        Vue.mixin({
+            beforeCreate:function(){
+                console.log('mixin222 -- beforeCreate');
+            },
+            created:function(){
+                console.log('mixin2222 -- create');
+            },
+            a:4
+        })
         const vm = new Vue({
             el:'#app',
+            created:()=>{
+                console.log('self-created');
+            },
             data:{
                 name:'zf',
                 age:20,
@@ -31,6 +51,8 @@
                 ],
             },
         })
+
+        console.log("🚀 ~ file: index.html:48 ~ vm:", vm)
         setTimeout(() => {
             vm.name = '1'
             vm.age = 333
