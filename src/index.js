@@ -1,7 +1,7 @@
 import { initGlobalAPI } from "./globalAPI.js"
 import { initMixin } from "./init"
 import { initLifeCycle } from "./linfecycle"
-import { nextTick } from "./observe/watcher.js"
+import { Watcher, nextTick } from "./observe/watcher.js"
 
 export default function Vue(options){
     //初始化
@@ -13,3 +13,7 @@ initMixin(Vue)
 initLifeCycle(Vue)
 
 initGlobalAPI(Vue)
+
+Vue.prototype.$watch = function(exptOrFn, cb){
+    new Watcher(this, exptOrFn, {user:true}, cb)
+}

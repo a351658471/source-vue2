@@ -17,7 +17,6 @@ export function initMixin(Vue){
     }
 
     Vue.prototype.$mount = function(el){
-        console.log("🚀 ~ file: init.js:17 ~ initMixin ~ el:", el)
         const vm = this
         const ops = vm.$options
         el = document.querySelector(el)

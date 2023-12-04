@@ -48,7 +48,6 @@ function genChildren(ast){
 function codeGen(ast){
     let children = genChildren(ast)
     let code = `_c('${ast.tag}',${ast.attrs.length? genProps(ast.attrs):'null'}, ${ast.children.length? children:'null'})`
-    console.log("🚀 ~ file: index.js:53 ~ codeGen ~ code:", code)
     return code
     
 }

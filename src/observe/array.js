@@ -16,7 +16,7 @@ const METHODS = [
 METHODS.forEach(methods => {
     newArrayProto[methods] = function(...args){
         const result = oldArrayProto[methods].call(this, ...args)
-        console.log("🚀 ~ file: array.js:19 ~ methods:", methods)
+        console.log("🚀 ~ file: array.js:19 ~ this:", this)
         let inserted
         switch(methods){
             case 'push':
@@ -28,11 +28,13 @@ METHODS.forEach(methods => {
             default :
                 break;
         }
+        let ob = this.__ob__
         if(inserted){
             //如果有新增 则对改新增部分进行观测
-            let ob = this.__ob__
+            
             ob.observeArray(inserted)
         }
+        ob.dep.notify()
         return result
     }
 })

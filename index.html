@@ -11,7 +11,7 @@
     </style>
 </head>
 <body>
-    <div id="app" class="outer" style="font-size: 12px;height: 50px;color: red;">{{obj.t1}}<div class="cc" style="font-size: 24px;"> DIV </div><span> hahah  {{name}} xixixi {{age}} cicii </span></div>
+    <div id="app" class="outer" style="font-size: 12px;height: 50px;color: red;"> {{arr}}</div>
     <script src="dist/vue.js"></script>
     <script>
         Vue.mixin({
@@ -39,27 +39,32 @@
             data:{
                 name:'zf',
                 age:20,
+                firstName:'叽叽歪歪',
+                lastName:'积极向上',
                 obj:{
                     t1:'hahah',
                     t2:'xixix'
                 },
                 address:'3333',
-                arr:[
-                    {
-                        id:0
-                    }
-                ],
+                arr:[1,[2,3]],
             },
+            watch:{
+                name(newVal, oldVal){
+                    console.log("🚀 ~ file: index.html:65 ~ cb ~ newVal, oldVa:", newVal, oldVal)
+                }
+            }
         })
-
+        // vm.$watch(()=>vm.name, function cb(newVal, oldVal){
+        //     console.log("🚀 ~ file: index.html:65 ~ cb ~ newVal, oldVa:", newVal, oldVal)
+        // })
         console.log("🚀 ~ file: index.html:48 ~ vm:", vm)
         setTimeout(() => {
-            vm.name = '1'
-            vm.age = 333
-            vm.$nextTick(()=>{
-                console.log("🚀 ~ file: index.html:38 ~ setTimeout ~ vm.$el:", vm.$el.innerText)
-            })
+           vm.arr[1].push(2)
         }, 1000);
+        // setTimeout(() => {
+        //     vm.firstName = '叽叽歪歪'
+        //     vm.name = '2222222'
+        // }, 2000);
     </script>
 </body>
 </html>

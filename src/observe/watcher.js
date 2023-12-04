@@ -1,20 +1,43 @@
-import { Dep } from "./dep.js"
+import { popTarget, pushTarget } from "./dep.js"
 
 let id = 0
 export class Watcher{
-    constructor(vm, updataComponent,option){
+    constructor(vm, exptOrFn,option, cb){
         this.id = id++
-        this.getter = updataComponent
+        if(typeof exptOrFn === 'string'){
+            this.getter = function(){
+                return vm[exptOrFn]
+            }
+        }else {
+            this.getter = exptOrFn
+        }
         this.renderWatcher = option
         this.deps = []
         this.depsId = new Set()
-        this.get()
+        
+        this.cb =cb
+        this.lazy = option.lazy //计算属性懒加载标识
+        this.dirty = this.lazy //计算属性 脏 标识  true的时候取值才会重新计算
+        this.user = option.user// 监听属性 标识
+        this.vm = vm
+        this.value = this.lazy?undefined:this.get()
+        
+    }
+    evaluate(){
+        this.value = this.get()
+        this.dirty = false
     }
     get(){
         console.log('get');
-        Dep.target = this
-        this.getter()
-        Dep.target = null
+        pushTarget(this)
+        let value = this.getter.call(this.vm)
+        popTarget()
+        return value
+    }
+    depend(){
+        this.deps.forEach(dep => {
+            dep.depend()
+        })
     }
     addDep(dep){
         if(!this.depsId.has(dep.id)){
@@ -22,16 +45,27 @@ export class Watcher{
             this.depsId.add(dep.id)
             dep.addSub(this)
         }
+        
     }
     updata(){
-        queueWatcher(this)
+        if(this.lazy){
+            this.dirty = true
+        }else{
+            queueWatcher(this)
+        }
+        
     }
     run(){
-        this.get()
+        let oldValue = this.value
+        let newValue = this.value=this.get()
+        if(this.user){
+            this.cb.call(this.vm, newValue, oldValue)
+        }
     }
 }
 
 let queue = []
+
 let padding =false
 let has = {}
 function flushSchedulerQueue(){
@@ -73,6 +107,8 @@ if(Promise){
 }
 function flushCallbacks(){
     callbacks.forEach(cb => cb())
+    callbacks = []
+    waiting =false
 }
 export function nextTick(cb){
     callbacks.push(cb)
