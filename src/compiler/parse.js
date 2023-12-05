@@ -36,7 +36,7 @@ export function parseHTML(html){
         stack.push(node)
     }
     function chars(text) {
-        text = text.replace(/\s+/g,' ')
+        text = text.replace(/\s+/g,'')
         if(!text)return
         currentParent.children.push({
             type:TEXT_TYPE,

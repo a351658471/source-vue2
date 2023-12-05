@@ -1,46 +1,6 @@
 import { Watcher } from "./observe/watcher.js";
 import { createElementVNode, createTextVNode } from "./vdom/index";
-
-function patchProps(el, props){
-    for(let key  in props){
-        if(key === 'style'){
-            for(let styleName in props.style){
-                el.style[styleName] = props.style[styleName]
-            }
-        }else{
-            el.setAttribute(key, props[key])
-        }
-    }
-}
-function createEle(vnode){
-    let {tag, data, children, text} = vnode
-    if(typeof tag === 'string'){
-        vnode.el = document.createElement(tag)
-        patchProps(vnode.el, data)
-        children.forEach(child => {
-           vnode.el.appendChild(createEle(child))
-        })
-    }else{
-        vnode.el = document.createTextNode(text)
-    }
-    return vnode.el
-}
-
-function patch(oldVNode, vnode){
-    const isRealElement = oldVNode.nodeType
-    if(isRealElement){
-        //有值说明是首次渲染 
-        const parentEl = oldVNode.parentNode
-        //创建真实dom
-        let newElm = createEle(vnode)
-        parentEl.insertBefore(newElm, oldVNode)
-        parentEl.removeChild(oldVNode)
-        return newElm
-    }else{
-        //是虚拟dom则进行diff算法
-    }
-
-}
+import { patch } from "./vdom/patch.js";
 
 export function initLifeCycle(Vue){
     Vue.prototype._render = function(){
@@ -49,7 +9,15 @@ export function initLifeCycle(Vue){
     }
     Vue.prototype._updata = function(vnode){
         const vm = this
-        vm.$el = patch(vm.$el, vnode)
+        const preVnode = vm._vnode 
+        vm._vnode = vnode //把组件第一次产生的虚拟节点保存到_vnode上
+        if(preVnode){
+            //有值说明之前渲染过
+            vm.$el = patch(preVnode, vnode)
+        }else{
+            vm.$el = patch(vm.$el, vnode)
+        }
+        
     }
     Vue.prototype._c = function(){
         return createElementVNode(this, ...arguments)
